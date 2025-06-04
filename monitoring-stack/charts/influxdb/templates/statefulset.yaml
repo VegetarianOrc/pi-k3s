@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: influxdb
+spec:
+  serviceName: influxdb
+  replicas: 1
+  selector:
+    matchLabels:
+      app: influxdb
+  template:
+    metadata:
+      labels:
+        app: influxdb
+    spec:
+      volumes:
+        - name: influxdb-storage
+          hostPath:
+            path: /data/influxdb
+            type: DirectoryOrCreate
+
+      containers:
+        - name: influxdb
+          image: '{{ .Values.image.repository }}:{{ .Values.image.tag }}'
+          command:
+            [
+              'influxdb3',
+              'serve',
+              '--node-id',
+              'pi0',
+              '--object-store',
+              'file',
+              '--data-dir',
+              'data/influxdb',
+            ]
+          ports:
+            - containerPort: 8181
+              name: influxdb
+          volumeMounts:
+            - name: influxdb-storage
+              mountPath: /data/influxdb

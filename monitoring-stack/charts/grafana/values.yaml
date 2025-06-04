@@ -1,0 +1,10 @@
+ingress:
+  enabled: true
+
+grafana:
+  grafana.ini:
+    server:
+      root_url: 'http://raspberrypi/grafana'
+
+  persistence:
+    enabled: true

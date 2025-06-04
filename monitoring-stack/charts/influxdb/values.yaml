@@ -1,0 +1,7 @@
+image:
+  repository: influxdb
+  tag: 3-core
+
+service:
+  type: ClusterIP
+  port: 8181

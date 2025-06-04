@@ -1,0 +1,31 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: influxdb
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: PathPrefix(`/influxdb/`)
+      kind: Rule
+      services:
+        - name: influxdb
+          port: 8181
+      middlewares:
+        - name: influxdb-strip-prefix
+    # Optional: support `/influxdb` without trailing slash
+    - match: Path(`/influxdb`)
+      kind: Rule
+      services:
+        - name: influxdb
+          port: 8181
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: influxdb-strip-prefix
+spec:
+  replacePathRegex:
+    regex: ^/influxdb/(.*)
+    replacement: /$1

@@ -1,0 +1,23 @@
+{{- if .Values.ingress.enabled }}
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: grafana
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: PathPrefix(`/grafana/`)
+      kind: Rule
+      services:
+        - name: grafana
+          port: 80
+      middlewares:
+        - name: grafana-strip-prefix
+    # Optional: support `/grafana` without trailing slash
+    - match: Path(`/grafana`)
+      kind: Rule
+      services:
+        - name: grafana
+          port: 80
+{{- end }}
