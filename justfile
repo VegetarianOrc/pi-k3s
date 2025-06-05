@@ -34,6 +34,11 @@ telegraf:
 		-n monitoring --create-namespace \
 		-f monitoring-stack/charts/telegraf/values.yaml
 
+mosquitto:
+	helm upgrade --install mosquitto ./charts/mosquitto \
+		-n mqtt --create-namespace \
+		-f charts/mosquitto/values.yaml
+
 op:
 	helm upgrade --install op-connect 1password/connect --set-file connect.credentials=1password-credentials.json --set operator.create=true --set operator.token.value="$OP_TOKEN"
 
